@@ -3,6 +3,10 @@ import dotenv from "dotenv";
 import mustache from "mustache-express";
 import path from "path";
 import { fileURLToPath } from "url";
+import mainRoutes from "./routes/index.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Configurando o dotenv
 dotenv.config();
@@ -16,6 +20,12 @@ server.engine("mustache", mustache());
 server.use(express.static(path.join(__dirname, "../public")));
 
 // Rotas
+
+server.use(mainRoutes)
+
+server.use((req, res) => {
+    res.status(404).send("Página não encontrada")
+})
 
 server.listen(process.env.PORT, () => {
     console.log("Server is running on port " + process.env.PORT);
